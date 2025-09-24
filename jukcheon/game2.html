@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>죽천초 - 게임2</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #f9f9f9; margin: 0; padding: 20px; }
+    .container { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
+    .game-img { position: relative; }
+    .game-img img { max-width: 500px; height: auto; }
+    .marker { position: absolute; border: 3px solid red; border-radius: 50%; pointer-events: none; }
+    .logo { position: absolute; top: 20px; right: 20px; width: 120px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <a href="../index.html">
+    <img src="../로고_바른에듀.png" alt="바른에듀 로고" class="logo">
+  </a>
+
+  <h1>죽천초 틀린그림찾기 - 사진2</h1>
+  <p id="instructions">틀린 곳을 찾아 클릭하세요!</p>
+
+  <div class="container">
+    <div class="game-img">
+      <img src="원본_죽천2.jpg" usemap="#map-jukcheon2">
+    </div>
+    <div class="game-img">
+      <img src="수정본_죽천2.jpg" usemap="#map-jukcheon2">
+    </div>
+  </div>
+
+  <map name="map-jukcheon2">
+    <area shape="circle" coords="164,613,74" href="#">
+    <area shape="circle" coords="1563,715,50" href="#">
+    <area shape="circle" coords="797,590,31" href="#">
+    <area shape="circle" coords="815,360,38" href="#">
+    <area shape="circle" coords="67,350,50" href="#">
+  </map>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/image-map-resizer/1.0.10/js/imageMapResizer.min.js"></script>
+  <script>
+    window.onload = function() {
+      imageMapResize();
+      const areas = document.querySelectorAll("area");
+      const container = document.querySelector(".container");
+      let found = 0;
+      const total = areas.length;
+      document.getElementById("instructions").innerHTML = `틀린 곳을 찾아 클릭하세요! (총 <b>${total}곳</b>)`;
+
+      areas.forEach(area => {
+        area.addEventListener("click", e => {
+          e.preventDefault();
+          const coords = area.coords.split(",");
+          let x, y, w, h;
+          if (area.shape === "rect") {
+            const x1=parseInt(coords[0]), y1=parseInt(coords[1]), x2=parseInt(coords[2]), y2=parseInt(coords[3]);
+            w=x2-x1; h=y2-y1; x=x1+w/2; y=y1+h/2;
+          } else if (area.shape==="circle") {
+            x=parseInt(coords[0]); y=parseInt(coords[1]); w=h=parseInt(coords[2])*2;
+          }
+          container.querySelectorAll(".game-img").forEach(imgBox=>{
+            const marker=document.createElement("div");
+            marker.className="marker";
+            marker.style.width=w+"px"; marker.style.height=h+"px";
+            marker.style.left=(x-w/2)+"px"; marker.style.top=(y-h/2)+"px";
+            imgBox.appendChild(marker);
+          });
+          found++;
+          if(found===total){ alert("축하합니다! 모든 틀린 곳을 찾았습니다 🎉"); }
+        });
+      });
+    };
+  </script>
+
+  <p><a href="index.html">← 사진 선택으로 돌아가기</a></p>
+</body>
+</html>
