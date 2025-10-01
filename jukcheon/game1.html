@@ -21,7 +21,7 @@
       position: relative;
     }
     .game-img img {
-      max-width: 500px;
+      max-width: 600px;
       height: auto;
     }
     .marker {
@@ -76,12 +76,18 @@
       let found = 0;
       const total = areas.length;
 
-      // instructions 텍스트 업데이트
-      document.getElementById("instructions").innerHTML = `틀린 곳을 찾아 클릭하세요! (총 <b>${total}곳</b>)`;
+      // 안내문에 총 개수 표시
+      document.getElementById("instructions").innerHTML = 
+        `틀린 곳을 찾아 클릭하세요! (총 <b>${total}곳</b>)`;
 
       areas.forEach(area => {
         area.addEventListener("click", e => {
           e.preventDefault();
+
+          // 이미 찾은 곳이면 무시
+          if (area.dataset.found === "true") return;
+          area.dataset.found = "true";
+
           const coords = area.coords.split(",");
           let x, y, w, h;
 
